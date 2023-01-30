@@ -1,8 +1,16 @@
 import { useState } from "react";
-import Header from "../components/Header"
+import Header from "../components/Header";
 
-function HomePage() {
-  const speakers = ["Alex", "John", "Andrew"];
+export async function getStaticProps() {
+  const res = await fetch('https://jsonplaceholder.typicode.com/posts');
+  // const posts = ["Alex", "John", "Andrew"];
+  const posts = await res.json();
+  return {
+    props: { posts }, // will be passed to the page component as props
+  };
+}
+
+function HomePage({posts}) {
 
   const [likes, setLikes] = useState(0);
 
@@ -13,14 +21,13 @@ function HomePage() {
     <>
       <Header title="Home page!" />
       <ul>
-        {speakers.map((speaker) => (
-          <li key={speaker}>{speaker}</li>
+        {posts.map((post) => (
+          <li key={post.id}>{post.title}</li>
         ))}
       </ul>
       <button onClick={handeClick}>Like {likes}</button>
     </>
   );
 }
-
 
 export default HomePage;
